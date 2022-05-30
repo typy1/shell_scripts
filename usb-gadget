@@ -8,13 +8,13 @@ DEVICETYPE="net-ecm"
 
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt)
 then
-    sudo sed -i '${s/$/ dtoverlay=dwc2/}' /boot/config.txt
+    sudo sed -i '${s/$/\ndtoverlay=dwc2/}' /boot/config.txt
 fi
 
 
 if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt)
 then
-    sudo sed -i '${s/$/\nmodules-load=dwc2/}' /boot/cmdline.txt
+    sudo sed -i '${s/$/ modules-load=dwc2/}' /boot/cmdline.txt
 fi
 
 
