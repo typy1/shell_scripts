@@ -18,7 +18,7 @@ sudo apt -y autoremove
 sudo apt -y clean
 sudo apt -y purge
 EOF
-	sudo chmod +x /script/upgrade	
+	sudo chmod +x /scripts/upgrade	
 	echo "/scripts/upgrade done!"
 fi
 
