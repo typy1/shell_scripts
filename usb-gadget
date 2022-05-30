@@ -3,28 +3,35 @@
 USB=/scripts/usb-gadget
 UNIT=/lib/systemd/system/usb-gadget.service
 BASE_IP=10.55.0
+DEVICETYPE="net-ecm"
+#DEVICETYPE="net-rndis"
 
-if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
+if ! $(grep -q dtoverlay=dwc2 /boot/config.txt)
+then
     sudo sed -i '${s/$/ dtoverlay=dwc2/}' /boot/config.txt
 fi
 
 
-if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt) ; then
+if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt)
+then
     sudo sed -i '${s/$/ modules-load=dwc2/}' /boot/cmdline.txt
 fi
 
 
-if ! $(grep -q libcomposite /etc/modules) ; then
+if ! $(grep -q libcomposite /etc/modules)
+then
     sudo sed -i '${s/$/ libcomposite"/}' /etc/modules
 fi
 
-if ! $(egrep -q "denyinterfaces usb0" /etc/dhcpcd.conf) ; then
+if ! $(egrep -q "denyinterfaces usb0" /etc/dhcpcd.conf)
+then
     sudo sed -i '${s/$/ denyinterfaces usb0"/}' /etc/dhcpcd.conf
 fi
 
 sudo apt install dnsmasq
 
-if [[ ! -e /etc/dnsmasq.d/usb-gadget ]] ; then
+if [[ ! -e /etc/dnsmasq.d/usb-gadget ]]
+then
 	cat << EOF | sudo tee /etc/dnsmasq.d/usb-gadget > /dev/null
 dhcp-rapid-commit
 dhcp-authoritative
@@ -35,26 +42,29 @@ domain=usb.lan
 dhcp-option=usb0,3
 leasefile-ro
 EOF
-    echo "Created /etc/dnsmasq.d/usb-gadget"
+	echo "/etc/dnsmasq.d/usb-gadget done!"
 fi
 
 
-if [[ ! -e /etc/network/interfaces.d/usb0 ]] ; then
-    cat << EOF | sudo tee /etc/network/interfaces.d/usb0 > /dev/null
+if [[ ! -e /etc/network/interfaces.d/usb0 ]]
+then
+	cat << EOF | sudo tee /etc/network/interfaces.d/usb0 > /dev/null
 auto usb0
 allow-hotplug usb0
 iface usb0 inet static
-  address $BASE_IP.1
-  netmask 255.255.255.248
+   address $BASE_IP.1
+   netmask 255.255.255.248
 EOF
-    echo "Created /etc/network/interfaces.d/usb0"
+	echo "/etc/network/interfaces.d/usb0 done"
 fi
 
-if [[ ! -e /etc/usb-gadgets ]]; then 
+if [[ ! -e /etc/usb-gadgets ]]
+then 
     sudo mkdir -p /etc/usb-gadgets
 fi
-if [[ ! -e /etc/usb-gadgets/net-rndis ]]; then
-    cat << 'EOF' | sudo tee /etc/usb-gadgets/net-rndis > /dev/null
+if [[ ! -e /etc/usb-gadgets/net-rndis ]]
+then
+	cat << 'EOF' | sudo tee /etc/usb-gadgets/net-rndis > /dev/null
 config1="RNDIS"
 config2="CDC"
 usb_version="0x0200" # USB 2.0
@@ -79,8 +89,9 @@ host_mac="12$(echo ${mac} | cut -b 3-)"
 EOF
 fi
 
-if [[ ! -e /etc/usb-gadgets/net-ecm ]]; then
-    cat << 'EOF' | sudo tee /etc/usb-gadgets/net-ecm > /dev/null
+if [[ ! -e /etc/usb-gadgets/net-ecm ]]
+then
+	cat << 'EOF' | sudo tee /etc/usb-gadgets/net-ecm > /dev/null
 config1="ECM"
 usb_version="0x0200" # USB 2.0
 vendor_id="0x1d6b" # Linux Foundation
@@ -96,12 +107,12 @@ power="250"
 host_mac="00:dc:c8:f7:75:14"
 dev_mac="00:dd:dc:eb:6d:a1"
 EOF
-
 fi
 
 
-if sudo test ! -e "$USB" ; then
-    cat << 'EOF' | sudo tee $USB > /dev/null
+if sudo test ! -e "$USB"
+then
+	cat << 'EOF' | sudo tee $USB > /dev/null
 #!/bin/bash
 gadget=/sys/kernel/config/usb_gadget/pi4
 if [[ ! -e "/etc/usb-gadgets/$1" ]]; then
@@ -157,20 +168,14 @@ udevadm settle -t 5 || :
 ifup usb0
 service dnsmasq restart
 EOF
-
-    sudo chmod 750 $USB
-    echo "Created $USB"
+	sudo chmod 750 $USB
+	echo "Created $USB"
 fi
 
 
-
-
-DEVICETYPE="net-ecm"
-#DEVICETYPE="net-rndis"
-
-# make sure $USBF runs on every boot using $UNIT
-if [[ ! -e $UNIT ]] ; then
-    cat << EOF | sudo tee $UNIT > /dev/null
+if [[ ! -e $UNIT ]]
+then
+	cat << EOF | sudo tee $UNIT > /dev/null
 [Unit]
 Description=USB gadget initialization
 After=network-online.target
@@ -179,12 +184,12 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=$USBF $DEVICETYPE
+ExecStart=$USB $DEVICETYPE
 [Install]
 WantedBy=sysinit.target
 EOF
-    echo "Created $UNIT"
-    sudo systemctl daemon-reload
-    sudo systemctl enable usb-gadget
+	echo "Created $UNIT"
+	sudo systemctl daemon-reload
+	sudo systemctl enable usb-gadget
 fi
 
