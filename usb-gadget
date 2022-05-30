@@ -32,6 +32,7 @@ else
     		sudo sed -i '${s/$/\ndenyinterfaces usb0/}' /etc/dhcpcd.conf
 	fi
 fi
+
 sudo apt install dnsmasq
 
 if [[ ! -e /etc/dnsmasq.d/usb-gadget ]]
@@ -59,7 +60,7 @@ iface usb0 inet static
    address $BASE_IP.1
    netmask 255.255.255.248
 EOF
-	echo "/etc/network/interfaces.d/usb0 done"
+	echo "/etc/network/interfaces.d/usb0 done!"
 fi
 
 if [[ ! -e /etc/usb-gadgets ]]
