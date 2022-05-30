@@ -1,12 +1,14 @@
 #!/bin/bash
 
 
-if ! [[ -d /scripts ]] ; then
+if ! [[ -d /scripts ]]
+then
    sudo mkdir /scripts
 fi
 
 
-if [[ ! -e /scripts/upgrade ]] ; then
+if [[ ! -e /scripts/upgrade ]]
+then
 	cat << EOF | sudo tee /scripts/upgrade > /dev/null
 #!/bin/bash
 sudo apt update
@@ -16,8 +18,8 @@ sudo apt -y autoremove
 sudo apt -y clean
 sudo apt -y purge
 EOF
-    sudo chmod +x /script/upgrade
-    echo "Created /scripts/upgrade"
+	sudo chmod +x /script/upgrade	
+	echo "/scripts/upgrade done!"
 fi
 
 sudo apt -y install htop screen mc
