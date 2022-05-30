@@ -19,4 +19,4 @@ EOF
     echo "Created /scripts/upgrade"
 fi
 
-sudo apt install htop screen mc
+sudo apt -y install htop screen mc
