@@ -22,7 +22,7 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
-sudo apt -y install htop screen mc
+sudo apt -y install htop screen mc burpsuite
 
 sudo sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 if ! $(sudo grep -q afowler /root/.zshrc)
