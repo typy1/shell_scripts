@@ -25,7 +25,7 @@ fi
 sudo apt -y install htop screen mc
 
 sudo sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-if ! $(grep -q afowler /root/.zshrc)
+if ! $(sudo grep -q afowler /root/.zshrc)
 then
     sudo sed -i '${s/ZSH_THEME=.*/ZSH_THEME=\"afowler\"/}' /root/.zshrc
     sudo sed -i '${s/$/export PATH=\$PATH:/scripts/}' /root/.zshrc
