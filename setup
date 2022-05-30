@@ -28,7 +28,7 @@ sudo sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/ins
 if ! $(sudo grep -q afowler /root/.zshrc)
 then
     sudo sed -i '${s/$ZSH_THEME=.*/$ZSH_THEME=\"afowler\"/}' /root/.zshrc
-    cat << EOF | sudo tee /root/.zshrc > /dev/null
+    cat << EOF | sudo tee -a /root/.zshrc > /dev/null
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
@@ -44,7 +44,8 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 if ! $(grep -q afowler ~/.zshrc)
 then
     sed -i '${s/ZSH_THEME=.*/ZSH_THEME=\"afowler\"/}' ~/.zshrc
-    cat << EOF >>  ~/.zshrc 
+ cat << EOF | tee -a ~/.zshrc > /dev/null
+export LANGUAGE=en_US.UTF-8
 export LANGUAGE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
