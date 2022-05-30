@@ -8,24 +8,24 @@ DEVICETYPE="net-ecm"
 
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt)
 then
-    sudo sed -i '${s/$/ dtoverlay=dwc2/}' /boot/config.txt
+    sudo sed -i 's/$/ dtoverlay=dwc2/' /boot/config.txt
 fi
 
 
 if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt)
 then
-    sudo sed -i '${s/$/ modules-load=dwc2/}' /boot/cmdline.txt
+    sudo sed -i 's/$/ modules-load=dwc2/' /boot/cmdline.txt
 fi
 
 
 if ! $(grep -q libcomposite /etc/modules)
 then
-    sudo sed -i '${s/$/ libcomposite"/}' /etc/modules
+    sudo sed -i 's/$/libcomposite/' /etc/modules
 fi
 
 if ! $(egrep -q "denyinterfaces usb0" /etc/dhcpcd.conf)
 then
-    sudo sed -i '${s/$/ denyinterfaces usb0"/}' /etc/dhcpcd.conf
+    sudo sed -i 's/$/ denyinterfaces usb0"/' /etc/dhcpcd.conf
 fi
 
 sudo apt install dnsmasq
@@ -188,7 +188,7 @@ ExecStart=$USB $DEVICETYPE
 [Install]
 WantedBy=sysinit.target
 EOF
-	echo "Created $UNIT"
+	echo "$UNIT created!"
 	sudo systemctl daemon-reload
 	sudo systemctl enable usb-gadget
 fi
