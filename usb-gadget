@@ -2,7 +2,7 @@
 
 USB=/scripts/usb-gadget
 UNIT=/lib/systemd/system/usb-gadget.service
-BASE_IP=10.10.10
+BASE_IP=10.55.0
 DEVICETYPE="net-ecm"
 #DEVICETYPE="net-rndis"
 
