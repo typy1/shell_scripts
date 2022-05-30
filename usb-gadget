@@ -1,7 +1,7 @@
 #!/bin/bash
 
-USBF=/scripts/usb-gadget
-UNITF=/lib/systemd/system/usb-gadget.service
+USB=/scripts/usb-gadget
+UNIT=/lib/systemd/system/usb-gadget.service
 BASE_IP=10.55.0
 
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt) ; then
@@ -38,7 +38,7 @@ EOF
     echo "Created /etc/dnsmasq.d/usb-gadget"
 fi
 
-# configure static ip for interface usb0
+
 if [[ ! -e /etc/network/interfaces.d/usb0 ]] ; then
     cat << EOF | sudo tee /etc/network/interfaces.d/usb0 > /dev/null
 auto usb0
@@ -89,7 +89,7 @@ bcd_device="0x0100" # v1.0.0
 device_class="0xEF"
 device_subclass="0x02"
 device_protocol="0x01"
-manufacturer="github.com/kmpm"
+manufacturer="typy"
 product="RPi4 USB Gadget"
 serial="fedcba9876543211"
 power="250"
@@ -100,9 +100,8 @@ EOF
 fi
 
 
-# create script, $USBFILE, for usb gadget device in 
-if sudo test ! -e "$USBFILE" ; then
-    cat << 'EOF' | sudo tee $USBFILE > /dev/null
+if sudo test ! -e "$USB" ; then
+    cat << 'EOF' | sudo tee $USB > /dev/null
 #!/bin/bash
 gadget=/sys/kernel/config/usb_gadget/pi4
 if [[ ! -e "/etc/usb-gadgets/$1" ]]; then
@@ -140,51 +139,38 @@ if [ "${config1}" = "ECM" ] ; then
     #mkdir -p ${gadget}/functions/acm.usb0
     #ln -s functions/acm.usb0 ${gadget}/configs/c.1/
 fi
-if [ "${config1}" = "RNDIS" ] ; then
-    mkdir -p ${gadget}/os_desc
-    echo "1" > ${gadget}/os_desc/use
-    echo "${ms_vendor_code}" > ${gadget}/os_desc/b_vendor_code
-    echo "${ms_qw_sign}" > ${gadget}/os_desc/qw_sign
-    mkdir -p ${gadget}/functions/rndis.usb0
-    echo "${dev_mac}" > ${gadget}/functions/rndis.usb0/dev_addr
-    echo "${host_mac}" > ${gadget}/functions/rndis.usb0/host_addr
-    echo "${ms_compat_id}" > ${gadget}/functions/rndis.usb0/os_desc/interface.rndis/compatible_id
-    echo "${ms_subcompat_id}" > ${gadget}/functions/rndis.usb0/os_desc/interface.rndis/sub_compatible_id
-    ln -s ${gadget}/configs/c.1 ${gadget}/os_desc
-    ln -s ${gadget}/functions/rndis.usb0 ${gadget}/configs/c.1
-fi
+#if [ "${config1}" = "RNDIS" ] ; then
+#    mkdir -p ${gadget}/os_desc
+#    echo "1" > ${gadget}/os_desc/use
+#    echo "${ms_vendor_code}" > ${gadget}/os_desc/b_vendor_code
+#    echo "${ms_qw_sign}" > ${gadget}/os_desc/qw_sign
+#    mkdir -p ${gadget}/functions/rndis.usb0
+#    echo "${dev_mac}" > ${gadget}/functions/rndis.usb0/dev_addr
+#    echo "${host_mac}" > ${gadget}/functions/rndis.usb0/host_addr
+#    echo "${ms_compat_id}" > ${gadget}/functions/rndis.usb0/os_desc/interface.rndis/compatible_id
+#    echo "${ms_subcompat_id}" > ${gadget}/functions/rndis.usb0/os_desc/interface.rndis/sub_compatible_id
+#    ln -s ${gadget}/configs/c.1 ${gadget}/os_desc
+#    ln -s ${gadget}/functions/rndis.usb0 ${gadget}/configs/c.1
+#fi
 ls /sys/class/udc > ${gadget}/UDC
 udevadm settle -t 5 || :
 ifup usb0
 service dnsmasq restart
 EOF
 
-    sudo chmod 750 $USBFILE
-    echo "Created $USBFILE"
+    sudo chmod 750 $USB
+    echo "Created $USB"
 fi
 
 
-prompt="Pick an option:"
-options=("RNDIS Network device type (best with windows)" "ECM Network device type")
-
-DEVICETYPE="net-rndis"
-
-echo -e "\n\nSelect network device type"
-PS3="$prompt "
-select opt in "${options[@]}" ; do 
-    case "$REPLY" in
-    1) DEVICETYPE="net-rndis";break;;
-    2) DEVICETYPE="net-ecm";break;;
-    *) echo "Invalid option. Try another one.";continue;;
-    esac
-done
-echo -e "\nYou selected '$DEVICETYPE' which will be configured in"
-echo -e "the systemd unit file for usb-gadget.\n"
 
 
-# make sure $USBFILE runs on every boot using $UNITFILE
-if [[ ! -e $UNITFILE ]] ; then
-    cat << EOF | sudo tee $UNITFILE > /dev/null
+DEVICETYPE="net-ecm"
+#DEVICETYPE="net-rndis"
+
+# make sure $USBF runs on every boot using $UNIT
+if [[ ! -e $UNIT ]] ; then
+    cat << EOF | sudo tee $UNIT > /dev/null
 [Unit]
 Description=USB gadget initialization
 After=network-online.target
@@ -193,20 +179,12 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=$USBFILE $DEVICETYPE
+ExecStart=$USBF $DEVICETYPE
 [Install]
 WantedBy=sysinit.target
 EOF
-    echo "Created $UNITFILE"
+    echo "Created $UNIT"
     sudo systemctl daemon-reload
     sudo systemctl enable usb-gadget
 fi
 
-cat << EOF
-Done setting up as USB gadget
-You must reboot for changes to take effect
-You can reach the device on $BASE_IP.1 when connected by USB
-If you want to disable the usb0/gadget interface then
-please run 'sudo systemctl disable usb-gadget'
-and reboot.
-EOF
