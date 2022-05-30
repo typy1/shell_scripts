@@ -8,26 +8,30 @@ DEVICETYPE="net-ecm"
 
 if ! $(grep -q dtoverlay=dwc2 /boot/config.txt)
 then
-    sudo sed -i 's/$/ dtoverlay=dwc2/' /boot/config.txt
+    sudo sed -i '${s/$/\ndtoverlay=dwc2/}' /boot/config.txt
 fi
 
 
 if ! $(grep -q modules-load=dwc2 /boot/cmdline.txt)
 then
-    sudo sed -i 's/$/ modules-load=dwc2/' /boot/cmdline.txt
+    sudo sed -i '${s/$/\nmodules-load=dwc2/}' /boot/cmdline.txt
 fi
 
 
 if ! $(grep -q libcomposite /etc/modules)
 then
-    sudo sed -i 's/$/libcomposite/' /etc/modules
+    sudo sed -i '${s/$/\nlibcomposite/}' /etc/modules
 fi
 
-if ! $(egrep -q "denyinterfaces usb0" /etc/dhcpcd.conf)
+if [[ ! -e /etc/dhcpcd.conf ]]
 then
-    sudo sed -i 's/$/ denyinterfaces usb0"/' /etc/dhcpcd.conf
+	echo "denyinterfaces usb0" | sudo tee /etc/dhcpcd.conf
+else
+	if ! $(egrep -q "denyinterfaces usb0" /etc/dhcpcd.conf)
+	then
+    		sudo sed -i '${s/$/\ndenyinterfaces usb0/}' /etc/dhcpcd.conf
+	fi
 fi
-
 sudo apt install dnsmasq
 
 if [[ ! -e /etc/dnsmasq.d/usb-gadget ]]
@@ -59,7 +63,7 @@ EOF
 fi
 
 if [[ ! -e /etc/usb-gadgets ]]
-then 
+then
     sudo mkdir -p /etc/usb-gadgets
 fi
 if [[ ! -e /etc/usb-gadgets/net-rndis ]]
@@ -146,7 +150,7 @@ if [ "${config1}" = "ECM" ] ; then
     echo "${dev_mac}" > ${gadget}/functions/ecm.usb0/dev_addr
     echo "${host_mac}" > ${gadget}/functions/ecm.usb0/host_addr
     ln -s ${gadget}/functions/ecm.usb0 ${gadget}/configs/c.1/
-    
+
     #mkdir -p ${gadget}/functions/acm.usb0
     #ln -s functions/acm.usb0 ${gadget}/configs/c.1/
 fi
@@ -192,4 +196,5 @@ EOF
 	sudo systemctl daemon-reload
 	sudo systemctl enable usb-gadget
 fi
+
 
