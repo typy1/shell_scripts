@@ -28,6 +28,8 @@ sudo apt -y install htop screen mc burpsuite responder dnsmasq hostapd netfilter
 
 if ! $(grep -q wlan0 /etc/hostapd/hostapd.conf)
 then
+echo "Enter WIFI password:"
+read changeme
 cat << EOF | sudo tee /etc/hostapd/hostapd.conf > /dev/null
 interface=wlan0
 driver=nl80211
@@ -43,7 +45,7 @@ wpa=2
 wpa_key_mgmt=WPA-PSK
 rsn_pairwise=CCMP
 ssid=AndroidAP
-wpa_passphrase=maduclapadure
+wpa_passphrase=$changeme
 EOF
 	sudo iptables -A FORWARD -i wlan0 -j ACCEPT
 	sudo iptables -A FORWARD -o wlan0 -j ACCEPT
