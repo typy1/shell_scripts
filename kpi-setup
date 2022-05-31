@@ -52,6 +52,8 @@ EOF
 	sudo iptables-save > /etc/iptables/rules.v4
 	sudo netfilter-persistent save
 	sudo systemctl enable iptables
+	
+	echo "iptables configured!"
 	echo "/etc/hostapd/hostapd.conf modified!"
 fi
 
