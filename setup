@@ -60,3 +60,8 @@ fi
 
 sudo systemctl disable smartmontools
 
+sudo mkdir -p /etc/systemd/system/networking.service.d/
+sudo bash -c 'echo -e "[Service]\nTimeoutStartSec=20sec" > /etc/systemd/system/networking.service.d/timeout.conf'
+sudo systemctl daemon-reload
+
+
