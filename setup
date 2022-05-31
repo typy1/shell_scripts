@@ -58,5 +58,5 @@ EOF
 fi
 
 
-
+sudo systemctl disable smartmontools
 
