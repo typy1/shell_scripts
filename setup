@@ -22,7 +22,36 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
-sudo apt -y install htop screen mc burpsuite responder dnsmasq
+
+sudo apt -y install htop screen mc burpsuite responder dnsmasq hostapd
+
+
+if ! $(grep -q wlan0 /etc/dnsmasq.conf)
+then
+cat << EOF | sudo tee -a /etc/dnsmasq.conf > /dev/null
+# DHCP server active for WLAN interface
+    interface = wlan0
+    # DHCP server not active for existing network
+    no-dhcp-interface = eth0
+    # IPv4 address range and lease time
+    dhcp-range = 192.168.200.100,192.168.200.150,24h
+EOF
+	echo "/etc/dnsmasq.conf modified!"
+fi
+
+if ! $(grep -q wlan0 /etc/network/interfaces)
+then
+cat << EOF | sudo tee -a /etc/network/interfaces > /dev/null
+auto wlan0
+    iface wlan0 inet static
+    address 192.168.200.1/24
+    gateway 192.168.200.1
+EOF
+	echo "/etc/network/interfaces modified!"
+fi
+
+
+
 
 sudo sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 if ! $(sudo grep -q afowler /root/.zshrc)
