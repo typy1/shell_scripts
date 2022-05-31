@@ -64,4 +64,7 @@ sudo mkdir -p /etc/systemd/system/networking.service.d/
 sudo bash -c 'echo -e "[Service]\nTimeoutSec=20" > /etc/systemd/system/networking.service.d/timeout.conf'
 sudo systemctl daemon-reload
 
+sudo sed -i '/auto eth0/d' /etc/network/interfaces.d/eth0
+
+
 
