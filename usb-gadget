@@ -42,7 +42,7 @@ dhcp-rapid-commit
 dhcp-authoritative
 no-ping
 interface=usb0
-dhcp-range=usb0,$BASEIP.2,$BASEIP.6,255.255.255.248,1h
+dhcp-range=usb0,$BASEIP.2,$BASEIP.2,255.255.255.248,1h
 domain=usb.lan
 dhcp-option=usb0,3
 leasefile-ro
