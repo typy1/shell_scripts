@@ -1,0 +1,83 @@
+#!/bin/bash
+
+WPAFILE=/etc/wpa_supplicant/wpa_supplicant.conf
+
+help(){
+	echo "Usage: wifi [--client|--server]"
+	exit 2
+}
+
+cli(){
+	if [ ! -f "$WPAFILE" ]
+	then
+		cat << EOF | sudo tee $WPAFILE > /dev/null
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=RO
+
+network={
+	ssid="SSID"
+	psk=ded24bbe15cf0dfefa681d722eb6af6fb7b08addd79587a84ee139ddae331f6e
+	key_mgmt=WPA-PSK
+
+}
+
+EOF
+	sudo systemctl --quiet disable hostapd
+	sudo systemctl --quiet stop hostapd
+	sudo chmod 600 $WPAFILE
+	sudo rm -f /var/run/wpa_supplicant/wlan0
+
+	sudo sed -i '/auto wlan0/d' /etc/network/interfaces
+	sudo sed -i '/iface wlan0 inet static/d' /etc/network/interfaces
+	sudo sed -i '/address 192.168.200.1\/24/d' /etc/network/interfaces
+	sudo sed -i '/gateway 192.168.200.1/d' /etc/network/interfaces
+
+	sudo systemctl --quiet restart wpa_supplicant.service
+	sudo systemctl --quiet disable wpa_supplicant.service
+	sudo systemctl --quiet enable wpa_supplicant@wlan0.service
+	sudo systemctl --quiet restart NetworkManager
+	fi
+	exit 2
+}
+
+srv(){
+	if [ -f "$WPAFILE" ]
+	then
+		sudo rm -f $WPAFILE
+		sudo -S killall wpa_supplicant | sudo tee /dev/null
+		sudo rm -f /var/run/wpa_supplicant/wlan0
+		sudo systemctl --quiet enable hostapd
+		sudo systemctl --quiet disable wpa_supplicant@wlan0.service
+		cat << EOF | sudo tee -a /etc/network/interfaces > /dev/null
+auto wlan0
+	iface wlan0 inet static
+	address 192.168.200.1/24
+	gateway 192.168.200.1
+EOF
+	sudo systemctl --quiet stop wpa_supplicant.service
+	sudo systemctl --quiet restart NetworkManager
+	sudo systemctl --quiet start hostapd
+	fi
+	exit 2
+}
+
+
+while [[ "$#" -gt 0 ]]; do
+case $1 in
+	-c|--client)# Client
+		cli
+		;;
+	-s|--server)# Server
+		srv
+		;;
+	-h|--help)# Display Help
+		help
+		;;
+	*)#Invalid option
+		echo "Unexpected option: $1"
+		help
+		;;
+	esac
+	shift
+done
