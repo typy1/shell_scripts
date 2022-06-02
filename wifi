@@ -37,6 +37,7 @@ EOF
 	sudo systemctl --quiet disable wpa_supplicant.service
 	sudo systemctl --quiet enable wpa_supplicant@wlan0.service
 	sudo systemctl --quiet restart NetworkManager
+	sudo nmcli d wifi connect LTE
 	fi
 	exit 2
 }
