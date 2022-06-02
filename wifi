@@ -33,9 +33,8 @@ EOF
 	sudo sed -i '/address 192.168.200.1\/24/d' /etc/network/interfaces
 	sudo sed -i '/gateway 192.168.200.1/d' /etc/network/interfaces
 
-	sudo systemctl --quiet restart wpa_supplicant.service
-	sudo systemctl --quiet disable wpa_supplicant.service
-	sudo systemctl --quiet enable wpa_supplicant@wlan0.service
+	sudo systemctl --quiet enable wpa_supplicant
+	sudo systemctl --quiet restart wpa_supplicant
 	sudo systemctl --quiet restart NetworkManager
 	sudo nmcli d wifi connect LTE
 	fi
@@ -56,9 +55,10 @@ auto wlan0
 	address 192.168.200.1/24
 	gateway 192.168.200.1
 EOF
-	sudo systemctl --quiet stop wpa_supplicant.service
+	sudo systemctl --quiet stop wpa_supplicant
+	sudo systemctl --quiet disable wpa_supplicant
 	sudo systemctl --quiet restart NetworkManager
-	sudo systemctl --quiet start hostapd
+
 	fi
 	exit 2
 }
