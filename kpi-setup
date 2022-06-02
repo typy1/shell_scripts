@@ -1,6 +1,8 @@
 #!/bin/bash
 
 
+sudo apt -y install htop screen mc burpsuite responder dnsmasq hostapd netfilter-persistent iptables-persistent hcxdumptool hcxtools
+
 if ! [[ -d /scripts ]]
 then
    sudo mkdir /scripts
@@ -23,7 +25,7 @@ EOF
 fi
 
 
-sudo apt -y install htop screen mc burpsuite responder dnsmasq hostapd netfilter-persistent iptables-persistent
+
 
 
 if ! $(grep -q wlan0 /etc/hostapd/hostapd.conf)
