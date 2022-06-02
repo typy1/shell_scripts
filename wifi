@@ -48,7 +48,7 @@ srv(){
 		sudo rm -f $WPAFILE
 		sudo -S killall wpa_supplicant | sudo tee /dev/null
 		sudo rm -f /var/run/wpa_supplicant/wlan0
-		sudo systemctl --quiet enable hostapd
+#		sudo systemctl --quiet enable hostapd
 		sudo systemctl --quiet disable wpa_supplicant@wlan0.service
 		cat << EOF | sudo tee -a /etc/network/interfaces > /dev/null
 auto wlan0
