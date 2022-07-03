@@ -13,6 +13,8 @@ if [[ ! -e /scripts/upgrade ]]
 then
 	cat << EOF | sudo tee /scripts/upgrade > /dev/null
 #!/bin/bash
+
+sudo dpkg --configure -a
 sudo apt update
 sudo apt -y upgrade
 sudo apt -y full-upgrade
