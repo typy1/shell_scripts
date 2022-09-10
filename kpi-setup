@@ -26,7 +26,7 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
-
+sudo apt-key adv --keyserver keys.gnupg.net --recv-keys 11764EE8AC24832F
 
 
 
