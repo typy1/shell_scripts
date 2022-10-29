@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo mkdir /scripts
+
 if [[ ! -e /scripts/upgrade ]]
 then
 	cat << EOF | sudo tee /scripts/upgrade > /dev/null
@@ -18,9 +20,16 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
-
+echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
+/scripts/upgrade
+sudo apt install openssh-server
+sudo ufw allow ssh
+
+#-------------------------------------------------------------------------------
+#INSTALL OSINT TOOLS-BASIC
+#-------------------------------------------------------------------------------
 sudo snap install vlc
 sudo apt update
 sudo apt upgrade -y
@@ -150,10 +159,26 @@ sudo -H pip list --outdated | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 sudo -H
 reboot
 
 #-------------------------------------------------------------------------------
+#INSTALL FIREFOX PROFILE
+#-------------------------------------------------------------------------------
+
+cd ~/Desktop
+curl -u osint9:book143wt -O https://inteltechniques.com/data/osintbook9/ff-template.zip
+unzip ff-template.zip -d ~/snap/firefox/
+cd ~/snap/firefox/ff-template/
+cp -R * ~/snap/firefox/common/.mozilla/firefox/*.default
+cd ~/Desktop
+rm ff-template.zip
+#Open Firefox and update all add-ons
+
+
+
+
+#-------------------------------------------------------------------------------
 #INSTALL SEARCH TOOLS
 #-------------------------------------------------------------------------------
 cd ~/Desktop
-curl -O https://inteltechniques.com/data/osintbook9/tools.zip
+curl -u osint9:book143wt -O https://inteltechniques.com/data/osintbook9/tools.zip
 unzip tools.zip -d ~/Desktop/
 rm tools.zip
 #INSTALL OSINT TOOLS-ADVANCED
