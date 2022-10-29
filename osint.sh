@@ -24,7 +24,7 @@ echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 /scripts/upgrade
-sudo apt install openssh-server
+sudo apt install openssh-server curl
 sudo ufw allow ssh
 
 #-------------------------------------------------------------------------------
