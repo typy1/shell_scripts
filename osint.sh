@@ -7,7 +7,7 @@ then
 	cat << EOF | sudo tee /scripts/upgrade > /dev/null
 #!/bin/bash
 sudo dpkg --configure -a
-sudo apt update
+sudo apt -y update
 sudo apt -y upgrade
 #list=$(apt -y list --upgradable | awk -e 'BEGIN{FS="/"}{print $1}'|head -100)
 #sudo apt -y install only-upgrade $list
@@ -24,7 +24,7 @@ echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 /scripts/upgrade
-sudo apt install openssh-server curl
+sudo apt -y install openssh-server curl
 sudo ufw allow ssh
 
 #-------------------------------------------------------------------------------
