@@ -24,7 +24,7 @@ echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 /scripts/upgrade
-sudo apt -y install openssh-server curl vim
+sudo apt -y install openssh-server curl vim pip python3.8-venv
 sudo ufw allow ssh
 
 #curl -u osint9:book143wt -O https://inteltechniques.com/data/osintbook9/vm-files.zip
@@ -39,6 +39,7 @@ sudo apt install -y python3-pip
 sudo pip install youtube-dl
 sudo pip install yt-dlp
 sudo pip install youtube-tool
+
 cd ~/Desktop
 sudo apt install -y curl
 curl -O https://inteltechniques.com/data/osintbook9/vm-files.zip
@@ -54,11 +55,15 @@ sudo cp * /usr/share/applications/
 cd ~/Desktop
 rm vm-files.zip
 rm -rf vm-files
+
+
 sudo pip install streamlink
 sudo pip install Instalooter
 sudo pip install Instaloader
 sudo pip install toutatis
+
 mkdir ~/Downloads/Programs
+
 cd ~/Downloads/Programs
 sudo apt install -y git
 sudo apt install -y python3.10-venv
@@ -71,12 +76,15 @@ deactivate
 sudo apt install libncurses5-dev libffi-dev -y
 make setup 
 #(This asks for IG username/pass, skip if desired)
+
 sudo snap install gallery-dl
 sudo snap connect gallery-dl:removable-media
+
 cd ~/Downloads
 sudo apt install default-jre -y
 wget https://github.com/ripmeapp/ripme/releases/latest/download/ripme.jar
 chmod +x ripme.jar
+
 cd ~/Downloads/Programs
 git clone https://github.com/sherlock-project/sherlock.git
 cd sherlock		
@@ -84,8 +92,10 @@ python3 -m venv SherlockEnvironment
 source SherlockEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 sudo pip install socialscan
 sudo pip install holehe
+
 cd ~/Downloads/Programs
 git clone https://github.com/WebBreacher/WhatsMyName.git
 cd WhatsMyName/whatsmyname
@@ -93,6 +103,7 @@ python3 -m venv WhatsMyNameEnvironment
 source WhatsMyNameEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/martinvigo/email2phonenumber.git
 cd email2phonenumber
@@ -100,11 +111,14 @@ python3 -m venv email2phonenumberEnvironment
 source email2phonenumberEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/ChrisTruncer/EyeWitness.git
 cd EyeWitness/Python/setup
 sudo ./setup.sh
+
 sudo snap install amass
+
 cd ~/Downloads/Programs
 git clone https://github.com/aboul3la/Sublist3r.git
 cd Sublist3r
@@ -112,6 +126,7 @@ python3 -m venv Sublist3rEnvironment
 source Sublist3rEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/s0md3v/Photon.git
 cd Photon
@@ -119,6 +134,7 @@ python3 -m venv PhotonEnvironment
 source PhotonEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/laramies/theHarvester.git
 cd theHarvester
@@ -126,8 +142,10 @@ python3 -m venv theHarvesterEnvironment
 source theHarvesterEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 sudo pip install testresources
 sudo pip install webscreenshot
+
 cd ~/Downloads/Programs
 git clone https://github.com/Lazza/Carbon14
 cd Carbon14
@@ -136,6 +154,7 @@ source Carbon14Environment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
 sudo apt install tor torbrowser-launcher -y
+
 cd ~/Downloads/Programs
 wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 sudo apt install -y ./google-chrome-stable_current_amd64.deb
@@ -144,6 +163,7 @@ sudo apt install -y mediainfo-gui
 sudo apt install -y libimage-exiftool-perl
 sudo apt install -y mat2
 sudo pip install xeuledoc
+
 cd ~/Downloads/Programs
 sudo apt install subversion -y
 git clone https://github.com/GuidoBartoli/sherloq.git
@@ -152,9 +172,11 @@ python3 -m venv sherloqEnvironment
 source sherloqEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 sudo pip install matplotlib
 sudo apt install -y webhttrack
 sudo apt install -y libcanberra-gtk-module
+
 cd ~/Downloads/Programs
 git clone https://github.com/opsdisk/metagoofil.git
 cd metagoofil
@@ -165,6 +187,7 @@ deactivate
 sudo apt install software-properties-common -y
 sudo pip install bdfr
 sudo pip install redditsfinder
+
 cd ~/Downloads/Programs
 git clone https://github.com/MalloyDelacroix/DownloaderForReddit.git
 cd DownloaderForReddit
@@ -172,11 +195,15 @@ python3 -m venv DownloaderForRedditEnvironment
 source DownloaderForRedditEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 wget http://dl.google.com/dl/earth/client/current/google-earth-stable_current_amd64.deb
 sudo apt install -y ./google-earth-stable_current_amd64.deb
 sudo rm google-earth-stable_current_amd64.deb
+
 sudo apt install -y kazam
 sudo snap install keepassxc
+
+
 sudo apt update --fix-missing
 sudo apt -y upgrade
 sudo apt --fix-broken install
@@ -214,6 +241,7 @@ python3 -m venv recon-ngEnvironment
 source recon-ngEnvironment/bin/activate
 sudo pip install -r REQUIREMENTS
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/smicallef/spiderfoot.git
 cd spiderfoot
@@ -221,6 +249,7 @@ python3 -m venv spiderfootEnvironment
 source spiderfootEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 cd ~/Downloads/Programs
 git clone https://github.com/AmIJesse/Elasticsearch-Crawler.git
 sudo pip install nested-lookup
@@ -229,6 +258,7 @@ sudo apt install -y ripgrep
 sudo pip install waybackpy
 sudo pip install search-that-hash
 sudo pip install h8mail
+
 cd ~/Downloads
 h8mail -g
 sed -i 's/\;leak\-lookup\_pub/leak\-lookup\_pub/g' h8mail_config.ini
