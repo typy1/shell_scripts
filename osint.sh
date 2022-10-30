@@ -24,8 +24,11 @@ echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 /scripts/upgrade
-sudo apt -y install openssh-server curl vim pip python3.8-venv
-sudo ufw allow ssh
+#sudo apt -y install openssh-server
+#sudo ufw allow ssh
+
+sudo apt -y install curl vim pip python3.8-venv
+sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 
 #curl -u osint9:book143wt -O https://inteltechniques.com/data/osintbook9/vm-files.zip
 
