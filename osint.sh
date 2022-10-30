@@ -1,6 +1,9 @@
 #!/bin/bash
 
+echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
+
 sudo mkdir /scripts
+echo "PATH=\$PATH:/scripts" | sudo tee -a $HOME/.profile
 
 if [[ ! -e /scripts/upgrade ]]
 then
@@ -9,8 +12,6 @@ then
 sudo dpkg --configure -a
 sudo apt -y update
 sudo apt -y upgrade
-#list=$(apt -y list --upgradable | awk -e 'BEGIN{FS="/"}{print $1}'|head -100)
-#sudo apt -y install only-upgrade $list
 sudo apt -y full-upgrade
 sudo apt -y autoremove
 sudo apt -y clean
@@ -20,15 +21,16 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
-echo "PATH=\$PATH:/scripts" | sudo tee $HOME/.profile
-echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 /scripts/upgrade
 #sudo apt -y install openssh-server
 #sudo ufw allow ssh
 
-sudo apt -y install curl vim pip python3.8-venv
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+sudo apt -y install curl vim pip zsh git
+#sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+#sudo wget -O /usr/share/backgrounds/osint.png  https://wallpapercave.com/download/osint-wallpapers-wp10215527
+#sudo gsettings set org.gnome.desktop.background picture-uri file:////usr/share/backgrounds/osint.png
 
 #curl -u osint9:book143wt -O https://inteltechniques.com/data/osintbook9/vm-files.zip
 
@@ -39,6 +41,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 sudo snap install vlc
 sudo apt install -y ffmpeg
 sudo apt install -y python3-pip
+
 sudo pip install youtube-dl
 sudo pip install yt-dlp
 sudo pip install youtube-tool
@@ -187,6 +190,7 @@ python3 -m venv metagoofilEnvironment
 source metagoofilEnvironment/bin/activate
 sudo pip install -r requirements.txt
 deactivate
+
 sudo apt install software-properties-common -y
 sudo pip install bdfr
 sudo pip install redditsfinder
