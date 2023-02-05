@@ -21,8 +21,9 @@ EOF
 	echo "/scripts/upgrade done!"
 fi
 
+source .profile
 
-/scripts/upgrade
+upgrade
 #sudo apt -y install openssh-server
 #sudo ufw allow ssh
 
