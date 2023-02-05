@@ -3,7 +3,7 @@
 echo "$USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/$USER
 
 sudo mkdir /scripts
-echo "PATH=\$PATH:/scripts" | sudo tee -a $HOME/.profile
+echo "PATH=/scripts:\$PATH" | sudo tee -a $HOME/.profile
 
 if [[ ! -e /scripts/upgrade ]]
 then
